@@ -8,10 +8,10 @@ const recipe_utils = require("./utils/recipes_utils");
  * Authenticate all incoming requests by middleware
  */
 router.use(async function (req, res, next) {
-  if (req.session && req.session.user_id) {
-    DButils.execQuery("SELECT user_id FROM users").then((users) => {
-      if (users.find((x) => x.user_id === req.session.user_id)) {
-        req.user_id = req.session.user_id;
+  if (req.session && req.session.username) {
+    DButils.execQuery("SELECT username FROM users").then((users) => {
+      if (users.find((x) => x.username === req.session.username)) {
+        req.username = req.session.username;
         next();
       }
     }).catch(err => next(err));
@@ -24,11 +24,11 @@ router.use(async function (req, res, next) {
 /**
  * This path gets body with recipeId and save this recipe in the favorites list of the logged-in user
  */
-router.post('/favorites', async (req,res,next) => {
+router.post('/:username/favorites', async (req,res,next) => {
   try{
-    const user_id = req.session.user_id;
+    const username = req.params.username;
     const recipe_id = req.body.recipeId;
-    await user_utils.markAsFavorite(user_id,recipe_id);
+    await user_utils.markAsFavorite(username,recipe_id);
     res.status(200).send("The Recipe successfully saved as favorite");
     } catch(error){
     next(error);
@@ -38,20 +38,114 @@ router.post('/favorites', async (req,res,next) => {
 /**
  * This path returns the favorites recipes that were saved by the logged-in user
  */
-router.get('/favorites', async (req,res,next) => {
+router.get('/:username/favorites', async (req,res,next) => {
   try{
-    const user_id = req.session.user_id;
-    let favorite_recipes = {};
-    const recipes_id = await user_utils.getFavoriteRecipes(user_id);
-    let recipes_id_array = [];
-    recipes_id.map((element) => recipes_id_array.push(element.recipe_id)); //extracting the recipe ids into array
-    const results = await recipe_utils.getRecipesPreview(recipes_id_array);
+    const username = req.params.username;
+    const recipes_id = await user_utils.getFavoriteRecipes(username);
+    console.log(recipes_id);
+    let recipes_id_array = recipes_id.map(element => element.recipeId);
+    console.log(recipes_id_array);
+    // Fetch recipe details for each recipeId
+    const promises = recipes_id_array.map(async recipeId => {
+      try {
+        return await recipe_utils.getRecipeDetails(recipeId);
+      } catch (error) {
+        // Handle errors for individual recipe details fetch
+        console.error(`Error fetching details for recipeId ${recipeId}:`, error);
+        return;
+      }
+    });
+    // Execute all promises concurrently
+    const results = await Promise.all(promises);
     res.status(200).send(results);
-  } catch(error){
+  } catch (error) {
     next(error); 
   }
 });
 
+/**
+ * This path gets body with recipeId and save this recipe in the viewed recipes list of the logged-in user, along with current date
+ * as viewing date.
+ */
+router.post('/:username/view', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipe_id = req.body.recipeId;
+    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format date as yyyy-mm-dd hh:mm:ss
+    await user_utils.markAsViewed(username,recipe_id,currentDate);
+    res.status(200).send("The Recipe successfully marked as viewed");
+    } catch(error){
+    next(error);
+  }
+});
+
+/**
+ * This path returns the recipes that were viewed by the logged-in user
+ */
+router.get('/:username/view', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipes_id = await user_utils.getAllViewedRecipes(username);
+    console.log(recipes_id);
+    let recipes_id_array = recipes_id.map(element => element.recipeId);
+    console.log(recipes_id_array);
+    // Fetch recipe details for each recipeId
+    const promises = recipes_id_array.map(async recipeId => {
+      try {
+        return await recipe_utils.getRecipeDetails(recipeId);
+      } catch (error) {
+        // Handle errors for individual recipe details fetch
+        console.error(`Error fetching details for recipeId ${recipeId}:`, error);
+        return;
+      }
+    });
+    // Execute all promises concurrently
+    const results = await Promise.all(promises);
+    res.status(200).send(results);
+  } catch (error) {
+    next(error); 
+  }
+});
+
+
+/**
+ * This path gets username and returns a json of his family recipes from database
+ */
+router.get('/:username/family', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipes = await user_utils.getFamilyRecipes(username);
+    res.status(200).send(recipes);
+    } catch(error){
+    next(error);
+  }
+});
+
+/**
+ * This path gets body with recipe information and save this recipe in the database as a recipe of the logged-in user
+ */
+router.post('/:username/recipes', async (req,res,next) => {
+  try{
+    const recipe = req.body;
+    await user_utils.addUserRecipe(recipe)
+    res.status(200).send("The Recipe was added to user's recipes successfully");
+    } catch(error){
+    next(error);
+  }
+});
+
+/**
+ * This path gets username and returns a json of his recipes from database
+ */
+router.get('/:username/recipes', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipes = await user_utils.getUsersRecipes(username);
+    res.status(200).send(recipes);
+    } catch(error){
+    next(error);
+  }
+});
 
 
 

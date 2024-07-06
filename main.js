@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv');
 //#region express configures
 var express = require("express");
 var path = require("path");
@@ -13,8 +13,7 @@ app.use(express.json()); // parse application/json
 app.use(
   session({
     cookieName: "session", // the cookie key name
-    //secret: process.env.COOKIE_SECRET, // the encryption key
-    secret: "template", // the encryption key
+    secret: process.env.COOKIE_SECRET || "template", // the encryption key
     duration: 24 * 60 * 60 * 1000, // expired after 20 sec
     activeDuration: 1000 * 60 * 5, // if expiresIn < activeDuration,
     cookie: {
@@ -28,21 +27,22 @@ app.use(express.static(path.join(__dirname, "public"))); //To serve static files
 //local:
 app.use(express.static(path.join(__dirname, "dist")));
 //remote:
-// app.use(express.static(path.join(__dirname, '../assignment-3-3-basic/dist')));
+//app.use(express.static(path.join(__dirname, '../assignment-3-3-basic/dist')));
 app.get("/",function(req,res)
 { 
   //remote: 
-  // res.sendFile(path.join(__dirname, '../assignment-3-3-basic/dist/index.html'));
+  //res.sendFile(path.join(__dirname, '../assignment-3-3-basic/dist/index.html'));
   //local:
   res.sendFile(__dirname+"/index.html");
 
 });
 
-// app.use(cors());
-// app.options("*", cors());
+app.use(cors());
+app.options("*", cors());
 
 const corsConfig = {
   origin: true,
+  //origin: "http://localhost:3000",
   credentials: true
 };
 
@@ -99,3 +99,5 @@ process.on("SIGINT", function () {
   }
   process.exit();
 });
+
+module.exports = app

@@ -1,5 +1,6 @@
 const axios = require("axios");
 const api_domain = "https://api.spoonacular.com/recipes";
+require('dotenv').config(); // env
 
 
 
@@ -19,7 +20,7 @@ async function getRecipeInformation(recipe_id) {
 }
 
 
-
+// information for preview recipe of a single recipe
 async function getRecipeDetails(recipe_id) {
     let recipe_info = await getRecipeInformation(recipe_id);
     let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe_info.data;
@@ -37,24 +38,33 @@ async function getRecipeDetails(recipe_id) {
     }
 }
 
+// function for searching recipe
 async function searchRecipe(recipeName, cuisine, diet, intolerance, number, username) {
-    const response = await axios.get(`${api_domain}/complexSearch`, {
-        params: {
-            query: recipeName,
-            cuisine: cuisine,
-            diet: diet,
-            intolerances: intolerance,
-            number: number,
-            apiKey: process.env.spooncular_apiKey
-        }
-    });
+    try {
+        const response = await axios.get(`${api_domain}/complexSearch`, {
+            params: {
+                query: recipeName,
+                cuisine: cuisine,
+                diet: diet,
+                intolerances: intolerance,
+                number: number,
+                apiKey: process.env.spooncular_apiKey
+            }
+        });
 
-    return getRecipesPreview(response.data.results.map((element) => element.id), username);
+        const recipeIds = response.data.results.map(element => element.id);
+        const recipesDetails = await Promise.all(recipeIds.map(recipeId => getRecipeDetails(recipeId)));
+        
+        return recipesDetails;
+    } catch (error) {
+        console.error('Error searching recipes:', error);
+    }
 }
 
 
 
 exports.getRecipeDetails = getRecipeDetails;
+exports.searchRecipe = searchRecipe;
 
 
 
