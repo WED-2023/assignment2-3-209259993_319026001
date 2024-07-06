@@ -147,6 +147,82 @@ router.get('/:username/recipes', async (req,res,next) => {
   }
 });
 
+/**
+ * This path gets username and number of recipes, and returns a json of his 
+ * last viewed number of recipes from database
+ */
+router.get('/:username/lastViewed', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const numberOfRecipes = req.params.numberOfRecipes;
+    if (numberOfRecipes === undefined) {
+      const recipes = await user_utils.getLastViewwedRecipes(username);
+      res.status(200).send(recipes);
+    }
+    else {
+      const recipes = await user_utils.getLastViewwedRecipes(username, numberOfRecipes);
+      res.status(200).send(recipes);
+    }
+    } catch(error){
+    next(error);
+  }
+});
+
+/**
+ * This path gets username and returns preview of recipes in current meal
+ */
+router.get('/:username/meal', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipes_id = await user_utils.getMealRecipes(username);
+    let recipes_id_array = recipes_id.map(element => element.recipeId);
+    // Fetch recipe details for each recipeId
+    const promises = recipes_id_array.map(async recipeId => {
+      try {
+        return await recipe_utils.getRecipeDetails(recipeId);
+      } catch (error) {
+        // Handle errors for individual recipe details fetch
+        console.error(`Error fetching details for recipeId ${recipeId}:`, error);
+        return;
+      }
+    });
+    // Execute all promises concurrently
+    const results = await Promise.all(promises);
+    res.status(200).send(results);
+  } catch (error) {
+    next(error); 
+  }
+});
+
+/**
+ * This path gets body with recipeId and adds this recipe to the meal recipes list of the logged-in user
+ */
+router.post('/:username/meal/add', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipe_id = req.body.recipeId;
+    await user_utils.addoToMeal(username,recipe_id);
+    res.status(200).send("The Recipe successfully added to meal");
+    } catch(error){
+    next(error);
+  }
+});
+
+/**
+ * This path gets body with recipeId and removes this recipe from the meal recipes list of the logged-in user
+ */
+router.post('/:username/meal/remove', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipe_id = req.body.recipeId;
+    await user_utils.RemoveFromMeal(username,recipe_id);
+    res.status(200).send("The Recipe was removed from meal successfully");
+    } catch(error){
+    next(error);
+  }
+});
+
+
 
 
 module.exports = router;

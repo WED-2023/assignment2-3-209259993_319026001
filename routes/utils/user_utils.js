@@ -34,11 +34,11 @@ async function getAllViewedRecipes(user_id){
 // get last viewed recipes of a user
 // takes in a username and returns last viewed recipes of user in db as a list
 async function getLastViewwedRecipes(user_id, numberOfRecipes=3){
-    const query = `SELECT recipeId, username, date
+    const query = `SELECT recipeId, username, lastViewed
     FROM viewed
     WHERE username = '${user_id}'
-    ORDER BY date DESC
-    LIMIT '${numberOfRecipes}';`
+    ORDER BY lastViewed DESC
+    LIMIT ${numberOfRecipes};`
     const recipes_id = await DButils.execQuery(query);
     return recipes_id;
 }
@@ -268,24 +268,6 @@ async function getFamilyRecipes(user_id){
       }
 }
 
-// get last searched recipes of a user
-// takes in a username and returns searched recipes of user in db as a list
-async function getSearchedRecipes(user_id, numberOfRecipes=3){
-    const query = `SELECT recipeId, username, date
-    FROM searched
-    WHERE username = '${user_id}'
-    ORDER BY date DESC
-    LIMIT '${numberOfRecipes}';`
-    const recipes_id = await DButils.execQuery(query);
-    return recipes_id;
-}
-
-// function for adding recipe to user's list of recipes
-// takes in a username, recipe id and date of search, and writes to table of searched recipes in db
-async function addSearchedRecipe(user_id, recipe_id, date){
-    await DButils.execQuery(`insert into searched values ('${user_id}',${recipe_id}, ${date})`);
-}
-
 // function for adding a recipe to user's meal
 // takes in a username and recipe id, and writes to table of meal in db
 async function addoToMeal(user_id, recipe_id){
@@ -315,8 +297,6 @@ exports.getUsersRecipes = getUsersRecipes;
 exports.getUsersRecipesInstructions = getUsersRecipesInstructions;
 exports.addUserRecipe = addUserRecipe;
 exports.getFamilyRecipes = getFamilyRecipes;
-exports.getSearchedRecipes = getSearchedRecipes;
-exports.addSearchedRecipe = addSearchedRecipe;
 exports.getLastViewwedRecipes = getLastViewwedRecipes;
 exports.getMealRecipes = getMealRecipes;
 exports.addoToMeal = addoToMeal;
