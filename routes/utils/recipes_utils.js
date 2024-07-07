@@ -20,10 +20,10 @@ async function getRecipeInformation(recipe_id) {
 }
 
 
-// information for preview recipe of a single recipe
+// information for preview recipe and recipe page of a single recipe
 async function getRecipeDetails(recipe_id) {
     let recipe_info = await getRecipeInformation(recipe_id);
-    let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe_info.data;
+    let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree, instructions, extendedIngredients } = recipe_info.data;
 
     return {
         id: id,
@@ -34,12 +34,14 @@ async function getRecipeDetails(recipe_id) {
         vegan: vegan,
         vegetarian: vegetarian,
         glutenFree: glutenFree,
-        
+        instructions: instructions,
+        extendedIngredients: extendedIngredients
+
     }
 }
 
 // function for searching recipe
-async function searchRecipe(recipeName, cuisine, diet, intolerance, number, username) {
+async function searchRecipe(recipeName, cuisine, diet, intolerance, number) {
     try {
         const response = await axios.get(`${api_domain}/complexSearch`, {
             params: {
@@ -61,10 +63,44 @@ async function searchRecipe(recipeName, cuisine, diet, intolerance, number, user
     }
 }
 
+// function that takes in a number of recipes (optional), and returns random recipes in that number
+async function getRandomRecipes(numOfRecipes=3) {
+    try {
+        const response = await axios.get(`${api_domain}/random`, {
+            params: {
+                number: numOfRecipes,
+                apiKey: process.env.spooncular_apiKey
+            }
+        });
+        const recipeIds = response.data.recipes.map(element => element.id);
+        const recipesDetails = await Promise.all(recipeIds.map(recipeId => getRecipeDetails(recipeId)));
+        return recipesDetails;
+    } catch (error) {
+        console.log("Error fetching recipes:", error);
+    }
+}
+
+// function that takes in a recipe id, and returns the full instructions of that recipe
+async function getInstructions(recipeId) {
+    try {
+        // get analayzed instructions of recipe
+        const response = await axios.get(`${api_domain}/${recipeId}/analyzedInstructions`, {
+            params: {
+                apiKey: process.env.spooncular_apiKey
+            }
+        });
+        const data = JSON.stringify(response.data, null, 2);
+        return data;
+    } catch (error) {
+        console.log("Error fetching instructions:", error);
+    }
+}
+
 
 
 exports.getRecipeDetails = getRecipeDetails;
 exports.searchRecipe = searchRecipe;
-
+exports.getRandomRecipes = getRandomRecipes;
+exports.getInstructions = getInstructions;
 
 
