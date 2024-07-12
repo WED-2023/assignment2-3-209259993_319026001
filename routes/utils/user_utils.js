@@ -176,12 +176,13 @@ async function addUserRecipe(recipe){
   try {
     // execute the query and save result
     const results = await DButils.execQuery(recipeInsertQuery);
+    i = 1
     // iterate instructions of recipe
     for (const instruction of recipe.instructions) {
       // query for inserting instructions
       const instructionInsertQuery = `
           INSERT INTO recipe_instructions (recipeId, step, step_description)
-          VALUES (${results.insertId}, ${instruction.step}, '${instruction.step_description}')
+          VALUES (${results.insertId}, ${i}, '${instruction.step}')
       `;
       // save results
       const insResults = await DButils.execQuery(instructionInsertQuery);
@@ -193,6 +194,7 @@ async function addUserRecipe(recipe){
             VALUES (${insResults.insertId}, '${ingredient.name}', ${ingredient.amount}, '${ingredient.unit}')
         `;
         await DButils.execQuery(ingredientInsertQuery);
+        i = i + 1;
     }
 
       // iterate equipment of instruction
@@ -220,7 +222,7 @@ async function getFamilyRecipes(user_id){
          i.instructionIndex, i.instruction
     FROM family_recipes r
     LEFT JOIN family_recipe_instructions i ON r.username = i.username AND r.recipeId = i.recipeId
-    WHERE r.username = '${user_id}'`;
+    WHERE r.username = 'lior'`;
     try {
          // execute the query
         const results = await DButils.execQuery(query);
@@ -288,6 +290,20 @@ async function getMealRecipes(user_id){
     return recipes_id;
 }
 
+// function that takes in username and recipe id, and checks if the user favorited the recipe
+async function isFavorite(username, recipeId) {
+    const query = `SELECT * FROM favorites WHERE username = '${username}' AND recipeId = ${recipeId}`;
+    const results = await DButils.execQuery(query);
+    return results.length > 0;
+}
+
+// function that takes in username and recipe id, and checks if the user viewed the recipe
+async function isViewed(username, recipeId) {
+  const query = `SELECT * FROM viewed WHERE username = '${username}' AND recipeId = ${recipeId}`;
+  const results = await DButils.execQuery(query);
+  return results.length > 0;
+}
+
 
 exports.markAsFavorite = markAsFavorite;
 exports.getFavoriteRecipes = getFavoriteRecipes;
@@ -301,3 +317,5 @@ exports.getLastViewwedRecipes = getLastViewwedRecipes;
 exports.getMealRecipes = getMealRecipes;
 exports.addoToMeal = addoToMeal;
 exports.RemoveFromMeal = RemoveFromMeal;
+exports.isFavorite = isFavorite;
+exports.isViewed = isViewed;

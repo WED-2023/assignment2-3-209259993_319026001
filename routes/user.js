@@ -37,6 +37,7 @@ router.post('/:username/favorites', async (req,res,next) => {
 
 /**
  * This path returns the favorites recipes that were saved by the logged-in user
+ * used for favorites page itself
  */
 router.get('/:username/favorites', async (req,res,next) => {
   try{
@@ -58,6 +59,36 @@ router.get('/:username/favorites', async (req,res,next) => {
     // Execute all promises concurrently
     const results = await Promise.all(promises);
     res.status(200).send(results);
+  } catch (error) {
+    next(error); 
+  }
+});
+
+/**
+ * This path gets body with recipeId and save this recipe in the favorites list of the logged-in user
+ */
+router.post('/:username/favorites', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipe_id = req.body.recipeId;
+    await user_utils.markAsFavorite(username,recipe_id);
+    res.status(200).send("The Recipe successfully saved as favorite");
+    } catch(error){
+    next(error);
+  }
+})
+
+/**
+ * This path returns the favorites recipes (only ids, used for marking) that were saved by the logged-in user
+ */
+router.get('/:username/favoritesID', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipes_id = await user_utils.getFavoriteRecipes(username);
+    console.log(recipes_id);
+    let recipes_id_array = recipes_id.map(element => element.recipeId);
+    console.log(recipes_id_array);
+    res.status(200).send(recipes_id_array);
   } catch (error) {
     next(error); 
   }
@@ -88,20 +119,7 @@ router.get('/:username/view', async (req,res,next) => {
     const recipes_id = await user_utils.getAllViewedRecipes(username);
     console.log(recipes_id);
     let recipes_id_array = recipes_id.map(element => element.recipeId);
-    console.log(recipes_id_array);
-    // Fetch recipe details for each recipeId
-    const promises = recipes_id_array.map(async recipeId => {
-      try {
-        return await recipe_utils.getRecipeDetails(recipeId);
-      } catch (error) {
-        // Handle errors for individual recipe details fetch
-        console.error(`Error fetching details for recipeId ${recipeId}:`, error);
-        return;
-      }
-    });
-    // Execute all promises concurrently
-    const results = await Promise.all(promises);
-    res.status(200).send(results);
+    res.status(200).send(recipes_id_array);
   } catch (error) {
     next(error); 
   }
@@ -156,11 +174,13 @@ router.get('/:username/lastViewed', async (req,res,next) => {
     const username = req.params.username;
     const numberOfRecipes = req.params.numberOfRecipes;
     if (numberOfRecipes === undefined) {
-      const recipes = await user_utils.getLastViewwedRecipes(username);
+      const lastRecipesIds = await user_utils.getLastViewwedRecipes(username);
+      const recipes = await recipe_utils.fetchRecipes(lastRecipesIds);
       res.status(200).send(recipes);
     }
     else {
-      const recipes = await user_utils.getLastViewwedRecipes(username, numberOfRecipes);
+      const lastRecipesIds = await user_utils.getLastViewwedRecipes(username, numberOfRecipes);
+      const recipes = await recipe_utils.fetchRecipes(lastRecipesIds);
       res.status(200).send(recipes);
     }
     } catch(error){
@@ -217,6 +237,34 @@ router.post('/:username/meal/remove', async (req,res,next) => {
     const recipe_id = req.body.recipeId;
     await user_utils.RemoveFromMeal(username,recipe_id);
     res.status(200).send("The Recipe was removed from meal successfully");
+    } catch(error){
+    next(error);
+  }
+});
+
+/**
+ * This path gets username and recipeId, and returns true if the recipe was favorited by user. else, returns false
+ */
+router.get('/:username/isFavorite', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipe_id = req.query.recipeId;
+    const response = await user_utils.isFavorite(username, recipe_id);
+    res.status(200).send(response);
+    } catch(error){
+    next(error);
+  }
+});
+
+/**
+ * This path gets username and recipeId, and returns true if the recipe was viewed by user. else, returns false
+ */
+router.get('/:username/isViewed', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipe_id = req.query.recipeId;
+    const response = await user_utils.isViewed(username, recipe_id);
+    res.status(200).send(response);
     } catch(error){
     next(error);
   }

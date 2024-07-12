@@ -10,11 +10,12 @@ router.get("/", (req, res) => res.send("im here"));
  */
 router.get("/search", async (req, res, next) => {
   try {
-    const recipeName = req.query.recipeName;
-    const cuisine = req.query.cuisine;
-    const diet = req.query.diet;
-    const intolerance = req.query.intolerance;
+    const recipeName = req.query.recipeName || "";
+    const cuisine = req.query.cuisine || "";
+    const diet = req.query.diet || "";
+    const intolerance = req.query.intolerance || "";
     const number = req.query.number || 5;
+    console.log("Search: ", recipeName, " cuisine: ", cuisine, " diet: ", diet, " intolerance: ", intolerance, " number:", number);
     const results = await recipes_utils.searchRecipe(recipeName, cuisine, diet, intolerance, number);
     res.send(results);
   } catch (error) {
