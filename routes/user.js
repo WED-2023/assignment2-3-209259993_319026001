@@ -65,36 +65,6 @@ router.get('/:username/favorites', async (req,res,next) => {
 });
 
 /**
- * This path gets body with recipeId and save this recipe in the favorites list of the logged-in user
- */
-router.post('/:username/favorites', async (req,res,next) => {
-  try{
-    const username = req.params.username;
-    const recipe_id = req.body.recipeId;
-    await user_utils.markAsFavorite(username,recipe_id);
-    res.status(200).send("The Recipe successfully saved as favorite");
-    } catch(error){
-    next(error);
-  }
-})
-
-/**
- * This path returns the favorites recipes (only ids, used for marking) that were saved by the logged-in user
- */
-router.get('/:username/favoritesID', async (req,res,next) => {
-  try{
-    const username = req.params.username;
-    const recipes_id = await user_utils.getFavoriteRecipes(username);
-    console.log(recipes_id);
-    let recipes_id_array = recipes_id.map(element => element.recipeId);
-    console.log(recipes_id_array);
-    res.status(200).send(recipes_id_array);
-  } catch (error) {
-    next(error); 
-  }
-});
-
-/**
  * This path gets body with recipeId and save this recipe in the viewed recipes list of the logged-in user, along with current date
  * as viewing date.
  */
