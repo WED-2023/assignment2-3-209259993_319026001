@@ -1,6 +1,5 @@
 var express = require("express");
 var router = express.Router();
-const MySql = require("../routes/utils/MySql");
 const DButils = require("../routes/utils/DButils");
 const bcrypt = require("bcrypt");
 
@@ -58,13 +57,10 @@ router.post("/login", async (req, res, next) => {
 
     // log password results
     console.log("Password comparison result:", bcrypt.compareSync(req.body.password, user.password));
-
     // Set cookie
     req.session.username = user.username;
     // log it
-    console.log("Session set:", req.session);
-
-
+    console.log("Session set:", req.session)
     // return cookie
     res.status(200).send({ message: "login succeeded", success: true });
   } catch (error) {

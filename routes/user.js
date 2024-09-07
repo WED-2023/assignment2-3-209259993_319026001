@@ -245,10 +245,10 @@ router.post('/:username/meal/remove', async (req,res,next) => {
 /**
  * This path gets username and recipeId, and returns true if the recipe was favorited by user. else, returns false
  */
-router.get('/:username/isFavorite', async (req,res,next) => {
+router.get('/:username/isFavorite/:recipeId', async (req,res,next) => {
   try{
     const username = req.params.username;
-    const recipe_id = req.query.recipeId;
+    const recipe_id = req.params.recipeId;
     const response = await user_utils.isFavorite(username, recipe_id);
     res.status(200).send(response);
     } catch(error){
@@ -259,10 +259,10 @@ router.get('/:username/isFavorite', async (req,res,next) => {
 /**
  * This path gets username and recipeId, and returns true if the recipe was viewed by user. else, returns false
  */
-router.get('/:username/isViewed', async (req,res,next) => {
+router.get('/:username/isViewed/:recipeId', async (req,res,next) => {
   try{
     const username = req.params.username;
-    const recipe_id = req.query.recipeId;
+    const recipe_id = req.params.recipeId;
     const response = await user_utils.isViewed(username, recipe_id);
     res.status(200).send(response);
     } catch(error){

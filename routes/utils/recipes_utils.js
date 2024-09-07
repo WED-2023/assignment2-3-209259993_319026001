@@ -23,11 +23,12 @@ async function getRecipeInformation(recipe_id) {
 // information for preview recipe and recipe page of a single recipe
 async function getRecipeDetails(recipe_id) {
     let recipe_info = await getRecipeInformation(recipe_id);
-    let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree, instructions, extendedIngredients } = recipe_info.data;
+    let { id, title, readyInMinutes, image, servings, aggregateLikes, vegan, vegetarian, glutenFree, instructions, extendedIngredients } = recipe_info.data;
 
     return {
         id: id,
         title: title,
+        servings: servings,
         readyInMinutes: readyInMinutes,
         image: image,
         popularity: aggregateLikes,
