@@ -136,6 +136,20 @@ router.get('/:username/recipes', async (req,res,next) => {
 });
 
 /**
+ * This path gets username and recipeId and returns a json of the recipe from database
+ */
+router.get('/:username/recipes/:recipeId', async (req,res,next) => {
+  try{
+    const username = req.params.username;
+    const recipeId = req.params.recipeId;
+    const recipe = await user_utils.getUsersRecipesInstructions(username, recipeId);
+    res.status(200).send(recipe);
+    } catch(error){
+    next(error);
+  }
+});
+
+/**
  * This path gets username and number of recipes, and returns a json of his 
  * last viewed number of recipes from database
  */

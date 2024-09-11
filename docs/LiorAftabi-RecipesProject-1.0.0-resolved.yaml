@@ -9,48 +9,48 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 servers:
-- url: https://virtserver.swaggerhub.com/LiorAftabi/RecipesProject/1.0.0
-  description: SwaggerHub API Auto Mocking
+  - url: https://virtserver.swaggerhub.com/LiorAftabi/RecipesProject/1.0.0
+    description: SwaggerHub API Auto Mocking
 tags:
-- name: auth
-  description: Operations related to authentication
-- name: users
-  description: Operations related to users
-- name: recipes
-  description: Operations available on recipes
+  - name: auth
+    description: Operations related to authentication
+  - name: users
+    description: Operations related to users
+  - name: recipes
+    description: Operations available on recipes
 paths:
   /login:
     get:
       tags:
-      - auth
+        - auth
       summary: user login
       description: |
         By passing in the appropriate credentials, you can login to the system
       operationId: userLogin
       parameters:
-      - name: username
-        in: query
-        description: username for login
-        required: true
-        style: form
-        explode: true
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
-      - name: password
-        in: query
-        description: password of user for login
-        required: true
-        style: form
-        explode: true
-        schema:
-          maxLength: 10
-          minLength: 5
-          pattern: "^(?=.*[0-9])(?=.*[!@#$%^&*(),.?\":{}|<>]).+$"
-          type: string
-          format: password
+        - name: username
+          in: query
+          description: username for login
+          required: true
+          style: form
+          explode: true
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
+        - name: password
+          in: query
+          description: password of user for login
+          required: true
+          style: form
+          explode: true
+          schema:
+            maxLength: 10
+            minLength: 5
+            pattern: '^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).+$'
+            type: string
+            format: password
       responses:
         "200":
           description: login succeeded
@@ -59,22 +59,22 @@ paths:
   /logout:
     get:
       tags:
-      - auth
+        - auth
       summary: user logout
       description: user logs out of system
       operationId: userLogout
       parameters:
-      - name: username
-        in: query
-        description: username for logout
-        required: true
-        style: form
-        explode: true
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
+        - name: username
+          in: query
+          description: username for logout
+          required: true
+          style: form
+          explode: true
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
       responses:
         "200":
           description: user logged out successfully
@@ -83,7 +83,7 @@ paths:
   /register:
     post:
       tags:
-      - auth
+        - auth
       summary: register as a user
       description: add a new user to the system
       operationId: userRegister
@@ -92,7 +92,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
       responses:
         "200":
           description: user registered
@@ -101,22 +101,22 @@ paths:
   /users/{username}/view:
     get:
       tags:
-      - users
+        - users
       summary: get user's viewed recipes
       description: user get a list of his viewed recipes
       operationId: getViewed
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
       responses:
         "200":
           description: viewed recipes were retrieved successfully
@@ -125,36 +125,36 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: "#/components/schemas/Recipe"
         "500":
           description: internal server error
     post:
       tags:
-      - users
+        - users
       summary: mark recipe as viewed
       description: user views recipe and it is marked as viewed
       operationId: viewRecipe
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
-      - name: recipeId
-        in: query
-        description: recipe to mark as viewed
-        required: true
-        style: form
-        explode: true
-        schema:
-          pattern: "^[0-9]+$"
-          type: string
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
+        - name: recipeId
+          in: query
+          description: recipe to mark as viewed
+          required: true
+          style: form
+          explode: true
+          schema:
+            pattern: "^[0-9]+$"
+            type: string
       responses:
         "200":
           description: the recipe was marked as viewed
@@ -163,22 +163,22 @@ paths:
   /users/{username}/favorites:
     get:
       tags:
-      - users
+        - users
       summary: get user's favorite recipes
       description: user get a list of his favorite recipes
       operationId: getFavorites
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
       responses:
         "200":
           description: favorite recipes were retrieved successfully
@@ -187,36 +187,36 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: "#/components/schemas/Recipe"
         "500":
           description: internal server error
     post:
       tags:
-      - users
+        - users
       summary: add recipe to favorites
       description: user adds a recipe to his favorite recipes
       operationId: addToFav
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
-      - name: recipeId
-        in: query
-        description: recipe to add to favorites
-        required: true
-        style: form
-        explode: true
-        schema:
-          pattern: "^[0-9]+$"
-          type: string
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
+        - name: recipeId
+          in: query
+          description: recipe to add to favorites
+          required: true
+          style: form
+          explode: true
+          schema:
+            pattern: "^[0-9]+$"
+            type: string
       responses:
         "200":
           description: recipe was added to favorites
@@ -225,22 +225,22 @@ paths:
   /users/{username}/family:
     get:
       tags:
-      - users
+        - users
       summary: get user's family recipes
       description: user get a list of his family recipes
       operationId: getFamRecipes
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
       responses:
         "200":
           description: family recipes were retrieved successfully
@@ -249,70 +249,70 @@ paths:
               schema:
                 type: array
                 example:
-                - id: 1
-                  image: https://www.allrecipes.com/thmb/oIBbjuG9rjXDmr5IdFPLM97DOhs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/257499-ghormeh-sabzi-persian-herb-stew-DDMFS-beauty-4x3-BG-2923-0a3327d626ca4b848bd1d1ebd7ca331d.jpg
-                  title: Ghormeh Sabzi
-                  readyInMinutes: 180
-                  owner: Grandmother Rachel
-                  whenToMake: Shabbat
-                  summary: "Horshat sabzi or gourmet sabzi is a vegetable and meat stew that is considered the flagship dish in Iranian cuisine. A sour dish whose ingredients are fresh and dried green vegetables that are cooked together with beef and red beans in a long cooking process. The dish is usually eaten on special occasions and on Shabbat, and it is usually served with white rice."
-                  ingredients:
-                  - 2 bunches of parsley
-                  - 2 bunches of dill
-                  - 2 bunches of coriander
-                  - A quarter of a bunch of mint
-                  - 2 large onions
-                  - 2 leeks
-                  - 2 tablespoons of tomato paste
-                  - Olive oil
-                  - 1 and a half kg of beef
-                  - 3 cups of water
-                  - 1 and a half cups of red beans
-                  - 4 Persian lemons
-                  - Salt to taste
-                  - 2 teaspoons of turmeric
-                  - 1 teaspoon cumin
-                  - 2-3 tablespoons of pomegranate concentrate
-                  instructions:
-                  - index: 1
-                    instruction: "Wash the herbs and dry thoroughly, separate the leaves and chop well."
-                  - index: 2
-                    instruction: "Cut one onion thinly and fry in a little oil in a wide pan, add chopped leek."
-                  - index: 3
-                    instruction: Add the tomato paste and continue frying.
-                  - index: 4
-                    instruction: "When the onion and leek are fried, add the herbs, fry for a few more minutes and remove from the heat. Set aside."
-                  - index: 5
-                    instruction: Chop the second onion and fry it in olive oil in a separate pot. Cut the meat into cubes approximately 4 cm by 4 cm. Add the meat cubes to the chopped onion and fry to 'close' the meat cubes.
-                  - index: 6
-                    instruction: Add the water and the beans and cook for about two hours until the meat and beans are soft and cooked.
-                  - index: 7
-                    instruction: "Add the herbs and mix. Add the lemon powder to the stew with salt, turmeric, cumin and pomegranate concentrate."
-                  - index: 8
-                    instruction: Cook for another hour on low heat.
+                  - id: 1
+                    image: https://www.allrecipes.com/thmb/oIBbjuG9rjXDmr5IdFPLM97DOhs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/257499-ghormeh-sabzi-persian-herb-stew-DDMFS-beauty-4x3-BG-2923-0a3327d626ca4b848bd1d1ebd7ca331d.jpg
+                    title: Ghormeh Sabzi
+                    readyInMinutes: 180
+                    owner: Grandmother Rachel
+                    whenToMake: Shabbat
+                    summary: "Horshat sabzi or gourmet sabzi is a vegetable and meat stew that is considered the flagship dish in Iranian cuisine. A sour dish whose ingredients are fresh and dried green vegetables that are cooked together with beef and red beans in a long cooking process. The dish is usually eaten on special occasions and on Shabbat, and it is usually served with white rice."
+                    ingredients:
+                      - 2 bunches of parsley
+                      - 2 bunches of dill
+                      - 2 bunches of coriander
+                      - A quarter of a bunch of mint
+                      - 2 large onions
+                      - 2 leeks
+                      - 2 tablespoons of tomato paste
+                      - Olive oil
+                      - 1 and a half kg of beef
+                      - 3 cups of water
+                      - 1 and a half cups of red beans
+                      - 4 Persian lemons
+                      - Salt to taste
+                      - 2 teaspoons of turmeric
+                      - 1 teaspoon cumin
+                      - 2-3 tablespoons of pomegranate concentrate
+                    instructions:
+                      - index: 1
+                        instruction: "Wash the herbs and dry thoroughly, separate the leaves and chop well."
+                      - index: 2
+                        instruction: "Cut one onion thinly and fry in a little oil in a wide pan, add chopped leek."
+                      - index: 3
+                        instruction: Add the tomato paste and continue frying.
+                      - index: 4
+                        instruction: "When the onion and leek are fried, add the herbs, fry for a few more minutes and remove from the heat. Set aside."
+                      - index: 5
+                        instruction: Chop the second onion and fry it in olive oil in a separate pot. Cut the meat into cubes approximately 4 cm by 4 cm. Add the meat cubes to the chopped onion and fry to 'close' the meat cubes.
+                      - index: 6
+                        instruction: Add the water and the beans and cook for about two hours until the meat and beans are soft and cooked.
+                      - index: 7
+                        instruction: "Add the herbs and mix. Add the lemon powder to the stew with salt, turmeric, cumin and pomegranate concentrate."
+                      - index: 8
+                        instruction: Cook for another hour on low heat.
                 items:
-                  $ref: '#/components/schemas/FamilyRecipe'
+                  $ref: "#/components/schemas/FamilyRecipe"
         "500":
           description: internal server error
   /users/{username}/recipes:
     get:
       tags:
-      - users
+        - users
       summary: get user's recipes
       description: user get a list of his recipes
       operationId: getMyRecipes
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
       responses:
         "200":
           description: user's recipes were retrieved successfully
@@ -321,33 +321,33 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: "#/components/schemas/Recipe"
         "500":
           description: internal server error
     post:
       tags:
-      - users
+        - users
       summary: add new recipe
       description: user adds a new recipe to his list of recipes
       operationId: addRecipe
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
       requestBody:
         description: information required of new recipe
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Recipe'
+              $ref: "#/components/schemas/Recipe"
       responses:
         "200":
           description: the recipe was successfully added to my recipes
@@ -356,22 +356,22 @@ paths:
   /recipes/random:
     get:
       tags:
-      - recipes
+        - recipes
       summary: get random recipes
       description: returns a list of random recipes
       operationId: getRandomRecipes
       parameters:
-      - name: count
-        in: query
-        description: number of random recipes to retrieve
-        required: false
-        style: form
-        explode: true
-        schema:
-          minimum: 1
-          type: integer
-          example: 10
-          default: 3
+        - name: count
+          in: query
+          description: number of random recipes to retrieve
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            example: 10
+            default: 3
       responses:
         "200":
           description: random recipes were retrieved successfully
@@ -380,39 +380,39 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: "#/components/schemas/Recipe"
         "500":
           description: internal server error
   /users/{username}/lastViewed:
     get:
       tags:
-      - users
+        - users
       summary: get last viewed recipes
       description: returns a list of a user's last viewed recipes
       operationId: getLastViewed
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
-      - name: count
-        in: query
-        description: number of last viewed recipes to retrieve
-        required: false
-        style: form
-        explode: true
-        schema:
-          minimum: 0
-          type: integer
-          example: 10
-          default: 3
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
+        - name: count
+          in: query
+          description: number of last viewed recipes to retrieve
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 0
+            type: integer
+            example: 10
+            default: 3
       responses:
         "200":
           description: last viewed recipes were retrieved successfully
@@ -421,80 +421,80 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: "#/components/schemas/Recipe"
         "500":
           description: internal server error
   /recipes/get/{recipeId}:
     get:
       tags:
-      - recipes
+        - recipes
       summary: get a specific recipe
       description: user/guests get the information of a specific recipe
       operationId: getRecipe
       parameters:
-      - name: recipeId
-        in: path
-        description: id of recipe to get
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^[0-9]+$"
-          type: string
+        - name: recipeId
+          in: path
+          description: id of recipe to get
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9]+$"
+            type: string
       responses:
         "200":
           description: recipe was retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Recipe'
+                $ref: "#/components/schemas/Recipe"
         "500":
           description: internal server error
   /recipes/instructions/{recipeId}:
     get:
       tags:
-      - recipes
+        - recipes
       summary: get a specific recipe's instructions
       description: user/guests get the instructions of a specific recipe
       operationId: getRecipeInstructions
       parameters:
-      - name: recipeId
-        in: path
-        description: id of recipe to get
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^[0-9]+$"
-          type: string
+        - name: recipeId
+          in: path
+          description: id of recipe to get
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9]+$"
+            type: string
       responses:
         "200":
           description: recipe instructions were retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AnalayzedInstructions'
+                $ref: "#/components/schemas/AnalayzedInstructions"
         "500":
           description: internal server error
   /users/{username}/meal:
     get:
       tags:
-      - users
+        - users
       summary: get user's meal
       description: returns a list of a user's recipes that are in his current meal
       operationId: getMeal
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
       responses:
         "200":
           description: meal recipes were retrieved successfully
@@ -503,37 +503,37 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: "#/components/schemas/Recipe"
         "500":
           description: internal server error
   /users/{username}/meal/add:
     post:
       tags:
-      - users
+        - users
       summary: add recipe to meal
       description: user adds a recipe to his current meal
       operationId: addToMeal
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
-      - name: recipeId
-        in: query
-        description: recipe to add to meal
-        required: true
-        style: form
-        explode: true
-        schema:
-          pattern: "^[0-9]+$"
-          type: string
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
+        - name: recipeId
+          in: query
+          description: recipe to add to meal
+          required: true
+          style: form
+          explode: true
+          schema:
+            pattern: "^[0-9]+$"
+            type: string
       responses:
         "200":
           description: recipe was added to meal
@@ -542,31 +542,31 @@ paths:
   /users/{username}/meal/remove:
     post:
       tags:
-      - users
+        - users
       summary: delete recipe from meal
       description: user removes a recipe from his current meal
       operationId: removeFromMeal
       parameters:
-      - name: username
-        in: path
-        description: username
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 8
-          minLength: 3
-          pattern: "^[a-zA-Z]+$"
-          type: string
-      - name: recipeId
-        in: query
-        description: recipe to be removed
-        required: true
-        style: form
-        explode: true
-        schema:
-          pattern: "^[0-9]+$"
-          type: string
+        - name: username
+          in: path
+          description: username
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maxLength: 8
+            minLength: 3
+            pattern: "^[a-zA-Z]+$"
+            type: string
+        - name: recipeId
+          in: query
+          description: recipe to be removed
+          required: true
+          style: form
+          explode: true
+          schema:
+            pattern: "^[0-9]+$"
+            type: string
       responses:
         "200":
           description: recipe was removed from meal
@@ -575,47 +575,47 @@ paths:
   /recipes/search:
     get:
       tags:
-      - recipes
+        - recipes
       summary: search for recipes in the database
       description: returns a list of recipes based on search parameters
       operationId: searchRecipes
       parameters:
-      - name: search
-        in: query
-        description: search term for the recipe
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: pancake
-      - name: cuisine
-        in: query
-        description: type of cuisine to filter the recipes
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: italian
-      - name: diet
-        in: query
-        description: diet type to filter the recipes
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: vegetarian
-      - name: intolerance
-        in: query
-        description: food intolerances to filter the recipes
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          example: dairy
+        - name: search
+          in: query
+          description: search term for the recipe
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: pancake
+        - name: cuisine
+          in: query
+          description: type of cuisine to filter the recipes
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: italian
+        - name: diet
+          in: query
+          description: diet type to filter the recipes
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: vegetarian
+        - name: intolerance
+          in: query
+          description: food intolerances to filter the recipes
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: dairy
       responses:
         "200":
           description: searched recipes were retrieved successfully
@@ -624,32 +624,32 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: "#/components/schemas/Recipe"
         "500":
           description: internal server error
   /{username}/isFavorite/{recipeId}:
     get:
       tags:
-      - users
+        - users
       summary: Check if recipe is favorited by user
       description: "Returns true if the recipe with `recipeId` was favorited by the user with `username`, otherwise returns false."
       parameters:
-      - name: username
-        in: path
-        description: The username of the user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: recipeId
-        in: path
-        description: The ID of the recipe
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
+        - name: username
+          in: path
+          description: The username of the user
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: recipeId
+          in: path
+          description: The ID of the recipe
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
       responses:
         "200":
           description: "True if favorited, otherwise false"
@@ -662,26 +662,26 @@ paths:
   /{username}/isViewed/{recipeId}:
     get:
       tags:
-      - users
+        - users
       summary: Check if recipe is viewed by user
       description: "Returns true if the recipe with `recipeId` was viewed by the user with `username`, otherwise returns false."
       parameters:
-      - name: username
-        in: path
-        description: The username of the user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: recipeId
-        in: path
-        description: The ID of the recipe
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
+        - name: username
+          in: path
+          description: The username of the user
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: recipeId
+          in: path
+          description: The ID of the recipe
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
       responses:
         "200":
           description: "True if viewed, otherwise false"
@@ -691,14 +691,48 @@ paths:
                 type: boolean
         "500":
           description: Internal server error
+  /users/{username}/recipes/{recipeId}:
+    get:
+      tags:
+        - users
+      summary: get a specific recipe
+      description: user get the information of a specific recipe he created
+      operationId: getUserRecipe
+      parameters:
+        - name: username
+          in: path
+          description: The username of the user
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: recipeId
+          in: path
+          description: id of recipe to get
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9]+$"
+            type: string
+      responses:
+        "200":
+          description: user recipe was retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        "500":
+          description: internal server error
 components:
   schemas:
     User:
       required:
-      - country
-      - email
-      - password
-      - username
+        - country
+        - email
+        - password
+        - username
       type: object
       properties:
         username:
@@ -710,7 +744,7 @@ components:
         password:
           maxLength: 20
           minLength: 8
-          pattern: "^(?=.*[0-9])(?=.*[!@#$%^&*(),.?\":{}|<>]).+$"
+          pattern: '^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).+$'
           type: string
           description: "must contain at least one number, one special character, and be between 8-20 characters long."
           format: password
@@ -721,15 +755,15 @@ components:
           example: lior@example.com
     Recipe:
       required:
-      - extendedIngredients
-      - glutenFree
-      - image
-      - instructions
-      - readyInMinutes
-      - servings
-      - title
-      - vegan
-      - vegetarian
+        - extendedIngredients
+        - glutenFree
+        - image
+        - instructions
+        - readyInMinutes
+        - servings
+        - title
+        - vegan
+        - vegetarian
       type: object
       properties:
         title:
@@ -752,7 +786,7 @@ components:
         instructions:
           type: array
           items:
-            $ref: '#/components/schemas/Recipe_instructions'
+            $ref: "#/components/schemas/Recipe_instructions"
         vegetarian:
           type: boolean
           description: Indicates if the recipe is vegetarian
@@ -768,7 +802,7 @@ components:
         extendedIngredients:
           type: array
           items:
-            $ref: '#/components/schemas/Recipe_extendedIngredients'
+            $ref: "#/components/schemas/Recipe_extendedIngredients"
     AnalayzedInstructions:
       type: object
       properties:
@@ -778,7 +812,7 @@ components:
         steps:
           type: array
           items:
-            $ref: '#/components/schemas/Step'
+            $ref: "#/components/schemas/Step"
     Step:
       type: object
       properties:
@@ -791,15 +825,15 @@ components:
         ingredients:
           type: array
           items:
-            $ref: '#/components/schemas/Ingredient'
+            $ref: "#/components/schemas/Ingredient"
         equipment:
           type: array
           items:
-            $ref: '#/components/schemas/Equipment'
+            $ref: "#/components/schemas/Equipment"
         length:
-          $ref: '#/components/schemas/Step_length'
+          $ref: "#/components/schemas/Step_length"
         temperature:
-          $ref: '#/components/schemas/Step_temperature'
+          $ref: "#/components/schemas/Step_temperature"
     Ingredient:
       type: object
       properties:
@@ -827,7 +861,7 @@ components:
           type: string
           description: Name of the equipment
         temperature:
-          $ref: '#/components/schemas/Step_temperature'
+          $ref: "#/components/schemas/Step_temperature"
     FamilyRecipe:
       type: object
       properties:
@@ -853,7 +887,7 @@ components:
         instructions:
           type: array
           items:
-            $ref: '#/components/schemas/FamilyRecipe_instructions'
+            $ref: "#/components/schemas/FamilyRecipe_instructions"
     Recipe_ingredients:
       type: object
       properties:
@@ -879,7 +913,7 @@ components:
         ingredients:
           type: array
           items:
-            $ref: '#/components/schemas/Recipe_ingredients'
+            $ref: "#/components/schemas/Recipe_ingredients"
     Recipe_extendedIngredients:
       type: object
       properties:
